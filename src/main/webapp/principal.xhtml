@@ -19,14 +19,17 @@
                         <td><h:inputText value="#{principalControl.nombre}"></h:inputText></td> 
                     </tr>
                     <tr>
+                        
                         <td><h:outputText value="Marca:"/></td>
                         <td><p:selectOneMenu value="#{principalControl.marca}" style="width:85%">
                                 <f:selectItems value="#{principalControl.marcas}"/>  
                         </p:selectOneMenu></td>
+                        
                     </tr>
                     <tr>
                         <td> <h:outputText value="Modelo:"/></td>
-                        <td><h:inputText value="#{principalControl.modelo}"></h:inputText></td> 
+                        <td><p:calendar id="año" value="#{principalControl.modelo}" pattern="yyyy" yearRange="1800:2020" required="true"/>
+                            <p:messages for="año"/> </td> 
                     </tr>
                 </table>
                 <br></br>
@@ -35,23 +38,34 @@
        </h:panelGroup>
             <br></br><br></br>
         <h:panelGroup>
-            <p:dataTable id="dtCarros" var="carro"  value="#{principalControl.listaCarros}" style="width: 70%; margin: auto;"
+            <p:dataTable id="dtCarros" var="carro"  value="#{principalControl.listaCarros}" widgetVar="DTcarros" style="width: 70%; margin: auto;"
                  rows="5"
                  paginator="true"
                  paginatorPosition="bottom"
                  paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                  rowsPerPageTemplate="5,10,15">
             <font></font>
-                <p:column headerText="Nombre"><font></font>
-                    <h:outputText  value="#{carro.nombre}"/><font></font>
+                <p:column filterBy="#{carro.nombre}" headerText="Nombre">
+                    <h:outputText value="#{carro.nombre}" />
                 </p:column><font></font>
             <font></font>
-                <p:column headerText="Marca"><font></font>
-                    <h:outputText value="#{carro.marca}"/><font></font>
+                <p:column filterBy="#{carro.marca}" headerText="Marca">
+                    <f:facet name="filter">
+                        <p:selectOneMenu onchange="PF('DTcarros').filter()" styleClass="custom-filter">
+                            <f:selectItem itemLabel="Selecciona" itemValue="#{null}" noSelectionOption="true" />
+                            <f:selectItems value="#{principalControl.marcas}" />
+                        </p:selectOneMenu>
+                    </f:facet>
+                    <h:outputText value="#{carro.marca}" />
                 </p:column><font></font>
             <font></font>
-                <p:column headerText="Modelo" ><font></font>
-                    <h:outputText value="#{carro.modelo}" /><font></font>
+                <p:column filterBy="#{carro.modelo}" headerText="Modelo">
+                    <f:facet name="filter">
+                        <p:spinner onchange="PF('DTcarros').filter()" styleClass="year-spinner custom-filter">
+                            <f:converter converterId="javax.faces.Integer" />
+                        </p:spinner>
+                    </f:facet>
+                    <h:outputText value="#{carro.modelo}" />
                 </p:column><font></font>
             </p:dataTable>
         </h:panelGroup>
