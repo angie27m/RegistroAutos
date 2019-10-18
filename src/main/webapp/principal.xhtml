@@ -1,0 +1,61 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Registro Carros</title>
+    </h:head>
+    <h:body>
+        <h:panelGroup layout="block" style="text-align: center;">
+             <h1>Registre su vehiculo!</h1>
+        </h:panelGroup>
+        <h:form>
+        <h:panelGroup layout="block" >
+                <table cellspacing="5" cellpadding="5" border="1.5" style="margin:auto;">
+                    <tr>
+                        <td> <h:outputText value="Nombre:"/></td>
+                        <td><h:inputText value="#{principalControl.nombre}"></h:inputText></td> 
+                    </tr>
+                    <tr>
+                        <td><h:outputText value="Marca:"/></td>
+                        <td><p:selectOneMenu value="#{principalControl.marca}" style="width:85%">
+                                <f:selectItems value="#{principalControl.marcas}"/>  
+                        </p:selectOneMenu></td>
+                    </tr>
+                    <tr>
+                        <td> <h:outputText value="Modelo:"/></td>
+                        <td><h:inputText value="#{principalControl.modelo}"></h:inputText></td> 
+                    </tr>
+                </table>
+                <br></br>
+                <p:commandButton value="Agregar" actionListener="#{principalControl.llenarListaCarros()}"  update="dtCarros" style="margin-left:45%; width: 10%;"/>
+            
+       </h:panelGroup>
+            <br></br><br></br>
+        <h:panelGroup>
+            <p:dataTable id="dtCarros" var="carro"  value="#{principalControl.listaCarros}" style="width: 70%; margin: auto;"
+                 rows="5"
+                 paginator="true"
+                 paginatorPosition="bottom"
+                 paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                 rowsPerPageTemplate="5,10,15">
+            <font></font>
+                <p:column headerText="Nombre"><font></font>
+                    <h:outputText  value="#{carro.nombre}"/><font></font>
+                </p:column><font></font>
+            <font></font>
+                <p:column headerText="Marca"><font></font>
+                    <h:outputText value="#{carro.marca}"/><font></font>
+                </p:column><font></font>
+            <font></font>
+                <p:column headerText="Modelo" ><font></font>
+                    <h:outputText value="#{carro.modelo}" /><font></font>
+                </p:column><font></font>
+            </p:dataTable>
+        </h:panelGroup>
+        </h:form>
+    </h:body>
+</html>
+
