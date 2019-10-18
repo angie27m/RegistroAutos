@@ -28,6 +28,7 @@ public class PrincipalControl implements Serializable{
     private int modelo;
     private List<String> marcas;
     private List<Carro> listaCarros;
+    private List<Carro> carrosfiltrados;
     
     @PostConstruct
     public void init() {
@@ -75,6 +76,14 @@ public class PrincipalControl implements Serializable{
 
     public void setListaCarros(List<Carro> listaCarros) {
         this.listaCarros = listaCarros;
+    }
+
+    public List<Carro> getCarrosfiltrados() {
+        return carrosfiltrados;
+    }
+
+    public void setCarrosfiltrados(List<Carro> carrosfiltrados) {
+        this.carrosfiltrados = carrosfiltrados;
     }
     
     public void llenarListaMarcas(){

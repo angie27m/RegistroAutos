@@ -13,39 +13,33 @@
         </h:panelGroup>
         <h:form>
         <h:panelGroup layout="block" >
-                <table cellspacing="5" cellpadding="5" border="1.5" style="margin:auto;">
-                    <tr>
-                        <td> <h:outputText value="Nombre:"/></td>
-                        <td><h:inputText value="#{principalControl.nombre}"></h:inputText></td> 
-                    </tr>
-                    <tr>
-                        
-                        <td><h:outputText value="Marca:"/></td>
-                        <td><p:selectOneMenu value="#{principalControl.marca}" style="width:85%">
-                                <f:selectItems value="#{principalControl.marcas}"/>  
-                        </p:selectOneMenu></td>
-                        
-                    </tr>
-                    <tr>
-                        <td> <h:outputText value="Modelo:"/></td>
-                        <td><p:calendar id="año" value="#{principalControl.modelo}" pattern="yyyy" yearRange="1800:2020" required="true"/>
-                            <p:messages for="año"/> </td> 
-                    </tr>
-                </table>
-                <br></br>
-                <p:commandButton value="Agregar" actionListener="#{principalControl.llenarListaCarros()}"  update="dtCarros" style="margin-left:45%; width: 10%;"/>
+            <h:panelGrid columns="2" border="2" cellspacing="1" cellpadding="5" style="margin: auto;">
+                     <h:outputText value="Nombre:"/>
+                     <p:inputText value="#{principalControl.nombre}"></p:inputText>
+                     <h:outputText value="Marca:"/>
+                     <p:selectOneMenu value="#{principalControl.marca}" style="width:90%">
+                        <f:selectItems value="#{principalControl.marcas}"/>  
+                     </p:selectOneMenu>
+                     <h:outputText value="Modelo:"/>
+                     <p:calendar id="año" value="#{principalControl.modelo}" pattern="yyyy" yearRange="1800:2020" required="true"/>
+            </h:panelGrid>
+                     <p:messages for="año"/>  
+            <br></br>
+           <p:commandButton id="add" value="Agregar" actionListener="#{principalControl.llenarListaCarros()}"  update="dtCarros" style="margin-left:45%; width: 10%;"/>
             
        </h:panelGroup>
             <br></br><br></br>
-        <h:panelGroup>
+            <h:panelGroup>
             <p:dataTable id="dtCarros" var="carro"  value="#{principalControl.listaCarros}" widgetVar="DTcarros" style="width: 70%; margin: auto;"
                  rows="5"
                  paginator="true"
                  paginatorPosition="bottom"
                  paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                 rowsPerPageTemplate="5,10,15">
+                 rowsPerPageTemplate="5,10,15" 
+                 emptyMessage="No se han encontrado registros"
+                 filteredValue="#{principalControl.carrosfiltrados}">
             <font></font>
-                <p:column filterBy="#{carro.nombre}" headerText="Nombre">
+            <p:column filterBy="#{carro.nombre}" headerText="Nombre" filterMatchMode="contains">
                     <h:outputText value="#{carro.nombre}" />
                 </p:column><font></font>
             <font></font>
