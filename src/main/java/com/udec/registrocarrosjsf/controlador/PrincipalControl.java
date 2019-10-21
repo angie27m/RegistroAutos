@@ -6,14 +6,18 @@
 package com.udec.registrocarrosjsf.controlador;
 
 import com.udec.registrocarrosjsf.modelo.Carro;
-import java.awt.Desktop;
 import java.io.Serializable;
+
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.SessionScoped;
 
 import javax.inject.Named;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+
 
 /**
  * Esta clase contiene los datos que van a ser guardados de los vehiculos
@@ -35,6 +39,8 @@ public class PrincipalControl implements Serializable {
     /**
      * variable que guarda el modelo del carro
      */
+    @Min(value=1960,message= "Modelo*: El año debe ser mayor a 1960")
+    @Max(value=2019,message= "Modelo*: El año debe ser menor a 2019")
     private int modelo;
     /**
      * lista de marcas de carros
