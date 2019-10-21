@@ -25,12 +25,13 @@
             </h:panelGrid>
                      <p:messages for="año"/>  
             <br></br>
-           <p:commandButton id="add" value="Agregar" actionListener="#{principalControl.llenarListaCarros()}"  update="dtCarros" style="margin-left:45%; width: 10%;"/>
+           <p:commandButton id="add" value="Agregar" actionListener="#{principalControl.llenarListaCarros()}"  update="panel" style="margin-left:45%; width: 10%;"/>
             
        </h:panelGroup>
             <br></br><br></br>
-            <h:panelGroup>
-            <p:dataTable id="dtCarros" var="carro" value="#{principalControl.listaCarros}" widgetVar="DTcarros" style="width: 70%; margin: auto;"
+            <h:panelGroup id="panel">
+                <p:dataTable id="dtCarros" var="carro" value="#{principalControl.listaCarros}" widgetVar="DTcarros" rendered="#{principalControl.listaCarros.size()>0}" 
+                 style="width: 70%; margin: auto;"
                  rows="5"
                  paginator="true"
                  paginatorPosition="bottom"
