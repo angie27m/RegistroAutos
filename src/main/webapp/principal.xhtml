@@ -9,63 +9,93 @@
     </h:head>
     <h:body>
         <h:panelGroup layout="block" style="text-align: center;">
-             <h1>Registre su vehículo!</h1>
+            <h1>Registre su vehículo!</h1>
         </h:panelGroup>
-        <h:form>
-        <h:panelGroup layout="block" >
-            <h:panelGrid id="grid" columns="3" border="2" cellspacing="1" cellpadding="5" style="margin: auto;">
-                <p:outputLabel  value="Nombre:"/>
-                     <p:inputText id="nom" value="#{principalControl.nombre}" required="true" label="Nombre*" style="width:95% "></p:inputText>
-                     <p:message for="nom"/>
-                     <p:outputLabel value="Marca:"/>
-                     <p:selectOneMenu id="mar" value="#{principalControl.marca}" style="width:90%">
+        <h:form id="form">
+            <p:growl id="msgs" showDetail="true"/>
+            <h:panelGroup layout="block" >
+                <h:panelGrid id="grid" columns="3" border="2" cellspacing="1" cellpadding="5" style="margin: auto;">
+                    <p:outputLabel  value="Nombre:"/>
+                    <p:inputText id="nom" value="#{principalControl.nombre}" required="true" label="Nombre*" style="width:95% "></p:inputText>
+                    <p:message for="nom"/>
+                    <p:outputLabel value="Marca:"/>
+                    <p:selectOneMenu id="mar" value="#{principalControl.marca}" style="width:90%">
                         <f:selectItems value="#{principalControl.marcas}"/>  
-                     </p:selectOneMenu>
-                     <p:message for="mar" />
-                     <p:outputLabel value="Modelo:"/>
-                     <p:calendar id="año" value="#{principalControl.modelo}" showOn="button" pattern="yyyy" yearRange="1960:2019" required="true"/>
-                     <p:message for="año" />
-            </h:panelGrid>
-            <br></br>
-           <p:commandButton id="add" value="Agregar" actionListener="#{principalControl.llenarListaCarros()}"  update="panel grid" style="margin-left:45%; width: 10%;"/>
-            
-       </h:panelGroup>
+                    </p:selectOneMenu>
+                    <p:message for="mar" />
+                    <p:outputLabel value="Modelo:"/>
+                    <p:calendar id="año" value="#{principalControl.modelo}" showOn="button" pattern="yyyy" yearRange="1960:2019" required="true"/>
+                    <p:message for="año" />
+                </h:panelGrid>
+                <br></br>
+                <p:commandButton id="add" value="Agregar" actionListener="#{principalControl.llenarListaCarros()}" update="panel grid" style="margin-left:45%; width: 10%;"/>
+
+            </h:panelGroup>
             <br></br><br></br>
             <h:panelGroup id="panel">
-                <p:dataTable id="dtCarros" var="carro" value="#{principalControl.listaCarros}" widgetVar="DTcarros" rendered="#{principalControl.listaCarros.size()>0 eq true}" 
-                 style="width: 70%; margin: auto;"
-                 rows="5"
-                 paginator="true"
-                 paginatorPosition="bottom"
-                 paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                 rowsPerPageTemplate="5,10,15" 
-                 emptyMessage="No se han encontrado registros"
-                 filteredValue="#{principalControl.carrosfiltrados}">
-            <font></font>
-            <p:column filterBy="#{carro.nombre}" headerText="Nombre" filterMatchMode="contains">
-                    <h:outputText value="#{carro.nombre}" />
-                </p:column><font></font>
-            <font></font>
-                <p:column filterBy="#{carro.marca}" headerText="Marca">
-                    <f:facet name="filter">
-                        <p:selectOneMenu onchange="PF('DTcarros').filter()" styleClass="custom-filter">
-                            <f:selectItem itemLabel="Selecciona" itemValue="#{null}" noSelectionOption="true" />
-                            <f:selectItems value="#{principalControl.marcas}" />
-                        </p:selectOneMenu>
-                    </f:facet>
-                    <h:outputText value="#{carro.marca}" />
-                </p:column><font></font>
-            <font></font>
-                <p:column filterBy="#{carro.modelo}" headerText="Modelo">
-                    <f:facet name="filter">
-                        <p:spinner onchange="PF('DTcarros').filter()" styleClass="year-spinner custom-filter">
-                            <f:converter converterId="javax.faces.Integer" />
-                        </p:spinner>
-                    </f:facet>
-                    <h:outputText value="#{carro.modelo}" />
-                </p:column><font></font>
-            </p:dataTable>
-        </h:panelGroup>
+                <p:dataTable id="dtCarros" var="carro" value="#{principalControl.listaCarros}" editable="true" widgetVar="DTcarros" rendered="#{principalControl.listaCarros.size()>0 eq true}" 
+                             style="width: 70%; margin: auto;"
+                             rows="5"
+                             paginator="true"
+                             paginatorPosition="bottom"
+                             paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                             rowsPerPageTemplate="5,10,15" 
+                             emptyMessage="No se han encontrado registros"
+                             filteredValue="#{principalControl.carrosfiltrados}">
+                    <font></font>
+                    <p:ajax event="rowEdit" listener="#{principalControl.onRowEdit}" update=":form:msgs" />
+                    <p:ajax event="rowEditCancel" listener="#{principalControl.onRowCancel}" update=":form:msgs" />
+
+                    <p:column headerText="Id">
+                        <p:cellEditor>
+                            <f:facet name="output"><h:outputText value="#{carro.id}" /></f:facet>
+                            <f:facet name="input"><p:inputText id="modelInput" value="#{carro.id}" style="width:100%"/></f:facet>
+                        </p:cellEditor>
+                    </p:column>
+
+                    <p:column filterBy="#{carro.nombre}" headerText="Nombre" filterMatchMode="contains">
+                        <p:cellEditor>
+                            <f:facet name="output"><h:outputText value="#{carro.nombre}" /></f:facet>
+                            <f:facet name="input"><p:inputText value="#{carro.nombre}" style="width:100%" label="Nombre"/></f:facet>
+                        </p:cellEditor>
+                    </p:column><font></font>
+                    <font></font>
+
+                    <p:column filterBy="#{carro.marca}" headerText="Marca">
+                        <f:facet name="filter">
+                            <p:selectOneMenu onchange="PF('DTcarros').filter()" styleClass="custom-filter">
+                                <f:selectItem itemLabel="Selecciona" itemValue="#{null}" noSelectionOption="true" />
+                                <f:selectItems value="#{principalControl.marcas}" />
+                            </p:selectOneMenu>
+                        </f:facet>
+                        <p:cellEditor>
+                            <f:facet name="output"><h:outputText value="#{carro.marca}" /></f:facet>
+                            <f:facet name="input">
+                                <h:selectOneMenu value="#{carro.marca}" style="width:100%">
+                                    <f:selectItems value="#{principalControl.marcas}" />
+                                </h:selectOneMenu>
+                            </f:facet>
+                        </p:cellEditor>
+
+                    </p:column><font></font>
+                    <font></font>
+                    <p:column filterBy="#{carro.modelo}" headerText="Modelo">
+                        <f:facet name="filter">
+                            <p:spinner onchange="PF('DTcarros').filter()" styleClass="year-spinner custom-filter">
+                                <f:converter converterId="javax.faces.Integer" />
+                            </p:spinner>
+                        </f:facet>
+                        <p:cellEditor>
+                            <f:facet name="output"><h:outputText value="#{carro.modelo}" /></f:facet>
+                            <f:facet name="input"><p:inputText value="#{carro.modelo}" style="width:100%" label="Year"/></f:facet>
+                        </p:cellEditor>
+                    </p:column><font></font>
+
+                    <p:column style="width:35px">
+                        <p:rowEditor />
+                    </p:column>
+                </p:dataTable>
+            </h:panelGroup>
         </h:form>
     </h:body>
 </html>

@@ -5,13 +5,15 @@
  */
 package com.udec.registrocarrosjsf.modelo;
 
+
 /**
  * Esta clase contiene los atributos de los carros
  *
  * @author Cristian Perez, Angie Manrique
  */
 public class Carro {
-
+    
+    private String id;
     /**
      * Variable que guarda el nombre del carro
      */
@@ -79,10 +81,19 @@ public class Carro {
         this.modelo = modelo;
     }
 
-    public Carro(String nombre, String marca, int modelo) {
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+       
+    public Carro(String id, String nombre, String marca, int modelo) {
+        this.id=id;
         this.nombre = nombre;
         this.marca = marca;
         this.modelo = modelo;
     }
-
 }

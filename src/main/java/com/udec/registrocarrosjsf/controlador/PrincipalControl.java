@@ -10,14 +10,17 @@ import java.io.Serializable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.SessionScoped;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 
 import javax.inject.Named;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
-
+import org.primefaces.event.CellEditEvent;
+import org.primefaces.event.RowEditEvent;
 
 /**
  * Esta clase contiene los datos que van a ser guardados de los vehiculos
@@ -39,8 +42,8 @@ public class PrincipalControl implements Serializable {
     /**
      * variable que guarda el modelo del carro
      */
-    @Min(value=1960,message= "Modelo*: El año debe ser mayor a 1960")
-    @Max(value=2019,message= "Modelo*: El año debe ser menor a 2019")
+    @Min(value = 1960, message = "Modelo*: El año debe ser mayor a 1960")
+    @Max(value = 2019, message = "Modelo*: El año debe ser menor a 2019")
     private int modelo;
     /**
      * lista de marcas de carros
@@ -192,14 +195,41 @@ public class PrincipalControl implements Serializable {
         marcas.add("Ferrari");
         marcas.add("Dodge");
     }
+    /**
+     * Método que genera de forma randomica el id de los vehiculos
+     * @return 
+     */
+    private String getRandomId() {
+        return UUID.randomUUID().toString().substring(0, 8);
+    }
 
     /**
      * Método que crea los carros y los guarda en una lista
      */
     public void llenarListaCarros() {
-        Carro carro = new Carro(nombre, marca, modelo);
+        Carro carro = new Carro(getRandomId(), nombre, marca, modelo);
         listaCarros.add(carro);
         System.out.println("" + carro.getMarca());
+    }
+
+    /**
+     * Método que se encarga de la edición de la fila seleccionada
+     *
+     * @param event
+     */
+    public void onRowEdit(RowEditEvent event) {
+        FacesMessage msg = new FacesMessage("Vehículo Editado: ", ((Carro) event.getObject()).getId());
+        FacesContext.getCurrentInstance().addMessage(null, msg);
+    }
+
+    /**
+     * Método que cancela la edición de la fila seleccionada
+     *
+     * @param event
+     */
+    public void onRowCancel(RowEditEvent event) {
+        FacesMessage msg = new FacesMessage("Edición Cancelada: ", ((Carro) event.getObject()).getId());
+        FacesContext.getCurrentInstance().addMessage(null, msg);
     }
 
 }
