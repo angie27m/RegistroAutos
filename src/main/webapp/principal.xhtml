@@ -13,6 +13,7 @@
         </h:panelGroup>
         <h:form id="form">
             <p:growl id="msgs" showDetail="true"/>
+
             <h:panelGroup layout="block" >
                 <h:panelGrid id="grid" columns="3" border="2" cellspacing="1" cellpadding="5" style="margin: auto;">
                     <p:outputLabel  value="Nombre:"/>
@@ -34,7 +35,7 @@
             <br></br><br></br>
             <h:panelGroup id="panel">
                 <p:dataTable id="dtCarros" var="carro" value="#{principalControl.listaCarros}" editable="true" widgetVar="DTcarros" rendered="#{principalControl.listaCarros.size()>0 eq true}" 
-                             style="width: 70%; margin: auto;"
+                             style="width: 100%; margin: auto;"
                              rows="5"
                              paginator="true"
                              paginatorPosition="bottom"
@@ -93,9 +94,24 @@
 
                     <p:column style="width:35px">
                         <p:rowEditor />
-                    </p:column>
+                    </p:column><font></font>
+                    <p:column style="width:35px" headerText="Eliminar">
+                        <h:selectBooleanCheckbox value="#{carro.seleccion}"/>
+                    </p:column><font></font>
                 </p:dataTable>
+                <br></br><br></br>
+                <p:commandButton value="Eliminar" actionListener="#{principalControl.eliminar()}" update="panel"
+                                 icon="ui-icon-trash">
+                    <p:confirm message="¿Seguro que desea eliminar?" header="Aviso" icon="ui-icon-alert"/>
+                </p:commandButton>
+                <p:confirmDialog global="true">
+                                 <p:commandButton value="si" type="Button" icon="ui-icon-check"
+                                 styleClass="ui-confirmdialog-yes"/>
+                                 <p:commandButton value="no" type="Button" icon="ui-icon-check"
+                                     styleClass="ui-confirmdialog-no"/>
+                </p:confirmDialog>
             </h:panelGroup>
+            
         </h:form>
     </h:body>
 </html>

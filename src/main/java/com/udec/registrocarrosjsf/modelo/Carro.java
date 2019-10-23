@@ -13,6 +13,7 @@ package com.udec.registrocarrosjsf.modelo;
  */
 public class Carro {
     
+    private boolean seleccion;
     private String id;
     /**
      * Variable que guarda el nombre del carro
@@ -89,7 +90,15 @@ public class Carro {
         this.id = id;
     }
 
-       
+    public boolean isSeleccion() {
+        return seleccion;
+    }
+
+    public void setSeleccion(boolean seleccion) {
+        this.seleccion = seleccion;
+    }
+    
+           
     public Carro(String id, String nombre, String marca, int modelo) {
         this.id=id;
         this.nombre = nombre;

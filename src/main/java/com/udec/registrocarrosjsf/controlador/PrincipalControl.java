@@ -19,7 +19,6 @@ import javax.faces.context.FacesContext;
 import javax.inject.Named;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
-import org.primefaces.event.CellEditEvent;
 import org.primefaces.event.RowEditEvent;
 
 /**
@@ -30,7 +29,10 @@ import org.primefaces.event.RowEditEvent;
 @Named(value = "principalControl")
 @SessionScoped
 public class PrincipalControl implements Serializable {
-
+    
+    private ArrayList<Carro> carrosEliminados;
+           
+    private boolean seleccion;
     /**
      * variable que guarda el nombre del carro
      */
@@ -60,7 +62,6 @@ public class PrincipalControl implements Serializable {
     /*
      Método que llama al método encargado del listado de marcas
      */
-
     @PostConstruct
     public void init() {
         llenarListaMarcas();
@@ -71,6 +72,7 @@ public class PrincipalControl implements Serializable {
      */
     public PrincipalControl() {
         listaCarros = new ArrayList();
+        carrosEliminados = new ArrayList();
     }
 
     /**
@@ -80,6 +82,22 @@ public class PrincipalControl implements Serializable {
      */
     public List<String> getMarcas() {
         return marcas;
+    }
+
+    public ArrayList<Carro> getCarrosEliminados() {
+        return carrosEliminados;
+    }
+
+    public void setCarrosEliminados(ArrayList<Carro> carrosEliminados) {
+        this.carrosEliminados = carrosEliminados;
+    }
+
+    public boolean isSeleccion() {
+        return seleccion;
+    }
+
+    public void setSeleccion(boolean seleccion) {
+        this.seleccion = seleccion;
     }
 
     /**
@@ -209,7 +227,6 @@ public class PrincipalControl implements Serializable {
     public void llenarListaCarros() {
         Carro carro = new Carro(getRandomId(), nombre, marca, modelo);
         listaCarros.add(carro);
-        System.out.println("" + carro.getMarca());
     }
 
     /**
@@ -232,4 +249,17 @@ public class PrincipalControl implements Serializable {
         FacesContext.getCurrentInstance().addMessage(null, msg);
     }
 
+    public void eliminar(){
+        for(Carro c: listaCarros){
+            if(c.isSeleccion()){
+                carrosEliminados.add(c);
+            }
+        }
+        if(!carrosEliminados.isEmpty()){
+            listaCarros.removeAll(carrosEliminados);
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Vehiculos eliminados"));
+        }
+    }
+    
+    
 }
