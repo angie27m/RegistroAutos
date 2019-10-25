@@ -29,7 +29,7 @@
                     <p:message for="año" />
                 </h:panelGrid>
                 <br></br>
-                <p:commandButton id="add" value="#{msg.agregar}" actionListener="#{principalControl.llenarListaCarros()}" update="panel grid" style="margin-left:45%; width: 10%;"/>
+                <p:commandButton id="add" value="#{msg.agregar}" actionListener="#{principalControl.llenarListaCarros()}" update="panel grid panel2" style="margin-left:45%; width: 10%;"/>
 
             </h:panelGroup>
             <br></br><br></br>
@@ -100,9 +100,9 @@
                     </p:column><font></font>
                 </p:dataTable>
                 <br></br><br></br>
-                <h:panelGroup>
+                <h:panelGroup id="panel2">
                     <p:commandButton id="eli" value="#{msg.eliminar}" actionListener="#{principalControl.eliminar()}" update="panel"
-                                     icon="ui-icon-trash">
+                                     icon="ui-icon-trash" rendered="#{principalControl.listaCarros.size()>0 eq true}" style="margin-left: 75%;">
                         <p:confirm message="¿Seguro que desea eliminar?" header="Aviso" icon="ui-icon-alert"/>
                     </p:commandButton>
                     <p:message for="eli"/>
