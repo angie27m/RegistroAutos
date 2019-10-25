@@ -11,6 +11,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
@@ -29,9 +31,13 @@ import org.primefaces.event.RowEditEvent;
 @Named(value = "principalControl")
 @SessionScoped
 public class PrincipalControl implements Serializable {
-    
+    /**
+     * Listado de carros eliminados
+     */
     private ArrayList<Carro> carrosEliminados;
-           
+    /**
+     * Seleccion de los carros a eliminar
+     */
     private boolean seleccion;
     /**
      * variable que guarda el nombre del carro
@@ -72,7 +78,7 @@ public class PrincipalControl implements Serializable {
      */
     public PrincipalControl() {
         listaCarros = new ArrayList();
-        carrosEliminados = new ArrayList();
+        carrosEliminados = new ArrayList();            
     }
 
     /**
@@ -225,8 +231,17 @@ public class PrincipalControl implements Serializable {
      * Método que crea los carros y los guarda en una lista
      */
     public void llenarListaCarros() {
+        try {
         Carro carro = new Carro(getRandomId(), nombre, marca, modelo);
         listaCarros.add(carro);
+        Logger.getLogger(PrincipalControl.class.getName()).log(Level.INFO, 
+                "Se ha agregado un carro a la lista: "+getNombre()+" "+getMarca()+" "+getModelo()+" ",carro);
+        } catch (Exception e) {
+              Logger.getLogger(PrincipalControl.class.getName()).log(Level.SEVERE, 
+                "error metodo llenarListaCarros() :"+PrincipalControl.class.getName()+" "+e,e);
+        }
+      
+        
     }
 
     /**
@@ -235,8 +250,16 @@ public class PrincipalControl implements Serializable {
      * @param event
      */
     public void onRowEdit(RowEditEvent event) {
-        FacesMessage msg = new FacesMessage("Vehículo Editado: ", ((Carro) event.getObject()).getId());
+        try{
+        FacesMessage msg = new FacesMessage("Vehículo editado con exito",((Carro) event.getObject()).getId());
         FacesContext.getCurrentInstance().addMessage(null, msg);
+         Logger.getLogger(PrincipalControl.class.getName()).log(Level.INFO, 
+                "Se edito un vehiculo:  "+((Carro) event.getObject()).getId()+
+                        " "+getNombre()+" "+getMarca()+" "+getModelo(),msg);
+        }catch (Exception e) {
+            Logger.getLogger(PrincipalControl.class.getName()).log(Level.SEVERE, 
+                "error onRowEdit:"+PrincipalControl.class.getName()+" "+e,e);
+        }
     }
 
     /**
@@ -245,20 +268,37 @@ public class PrincipalControl implements Serializable {
      * @param event
      */
     public void onRowCancel(RowEditEvent event) {
-        FacesMessage msg = new FacesMessage("Edición Cancelada: ", ((Carro) event.getObject()).getId());
-        FacesContext.getCurrentInstance().addMessage(null, msg);
+        try {
+             FacesMessage msg = new FacesMessage("Edición Cancelada: ", ((Carro) event.getObject()).getId());
+             FacesContext.getCurrentInstance().addMessage(null, msg);
+        } catch (Exception e) {
+            Logger.getLogger(PrincipalControl.class.getName()).log(Level.SEVERE, 
+                "error onRowCancel:"+PrincipalControl.class.getName()+" "+e,e);
+        }
+       
     }
-
+    /**
+     * Metodo para eliminar carros de la lista
+     */
     public void eliminar(){
-        for(Carro c: listaCarros){
+        try {
+            for(Carro c: listaCarros){
             if(c.isSeleccion()){
                 carrosEliminados.add(c);
             }
         }
         if(!carrosEliminados.isEmpty()){
             listaCarros.removeAll(carrosEliminados);
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Vehiculos eliminados"));
+             Logger.getLogger(PrincipalControl.class.getName()).log(Level.INFO, 
+                "Se elimino un vehiculo:  "+" "+getNombre()+" "+getMarca()+" "+getModelo(),this);
         }
+         FacesMessage msg = new FacesMessage("Vehículos eliminados con exito");
+            FacesContext.getCurrentInstance().addMessage(null, msg);
+        } catch (Exception e) {
+            Logger.getLogger(PrincipalControl.class.getName()).log(Level.SEVERE, 
+                "error eliminar():"+PrincipalControl.class.getName()+" "+e,e);
+        }
+        
     }
     
     

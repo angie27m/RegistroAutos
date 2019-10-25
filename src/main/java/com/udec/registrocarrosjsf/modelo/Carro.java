@@ -12,8 +12,13 @@ package com.udec.registrocarrosjsf.modelo;
  * @author Cristian Perez, Angie Manrique
  */
 public class Carro {
-    
+    /**
+     * seleccionado pare eliminar
+     */
     private boolean seleccion;
+    /**
+     * id del carro
+     */
     private String id;
     /**
      * Variable que guarda el nombre del carro
@@ -98,7 +103,13 @@ public class Carro {
         this.seleccion = seleccion;
     }
     
-           
+         /**
+          * 
+          * @param id id del carro
+          * @param nombre nombre del carro
+          * @param marca marca del carro
+          * @param modelo modelo del carro
+          */  
     public Carro(String id, String nombre, String marca, int modelo) {
         this.id=id;
         this.nombre = nombre;
